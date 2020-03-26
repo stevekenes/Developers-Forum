@@ -41,12 +41,19 @@ namespace DevelopersForum.Controllers
                 AuthorRating = post.ApplicationUsers.Rating,
                 Created = post.Created,
                 PostContent = post.Content,
-                Replies = replies
+                Replies = replies, 
+                ForumId = post.Forum.ForumId,
+                ForumName = post.Forum.Title,
+                IsAuthorAdmin = IsAuthorAdmin(post.ApplicationUsers)
             };
 
             return View(model);
         }
 
+        private bool IsAuthorAdmin(ApplicationUsers applicationUsers)
+        {
+            return _userManager.GetRolesAsync(applicationUsers).Result.Contains("Admin");
+        }
 
         public IActionResult Create(int id)
         {
@@ -100,7 +107,8 @@ namespace DevelopersForum.Controllers
                 AuthorImageUrl = reply.ApplicationUsers.ProfileImageUrl,
                 AuthorRating = reply.ApplicationUsers.Rating,
                 Created = reply.Created,
-                ReplyContent = reply.Content
+                ReplyContent = reply.Content,
+                IsAuthorAdmin = IsAuthorAdmin(reply.ApplicationUsers)
             });
         }
     }

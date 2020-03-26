@@ -11,6 +11,7 @@ namespace DevelopersForum.ViewModels
         public int AuthorRating { get; set; }
         public DateTime Created { get; set; }
         public string ReplyContent { get; set; }
+        public bool IsAuthorAdmin { get; set; }
 
         public int PostId { get; set; }
     }
