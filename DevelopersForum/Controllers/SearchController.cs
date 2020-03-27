@@ -11,7 +11,7 @@ namespace DevelopersForum.Controllers
     public class SearchController : Controller
     {
         private readonly IPostService _postService;
-
+         
         public SearchController(IPostService postService)
         {
             _postService = postService;
