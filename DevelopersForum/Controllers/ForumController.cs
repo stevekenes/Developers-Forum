@@ -38,46 +38,39 @@ namespace DevelopersForum.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> Topic(int id)
+        public IActionResult Topic(int id, string searchQuery)
         {
             var forum = _forumService.GetById(id);
-            var allPost = await _forumService.GetAllPostByForumId(id);
+             var posts = new List<Post>();
 
-            //var postListings = allPost.Select(post => new PostListingModel
-            //{
-            //    Id = post.Id,
-            //    AuthorId = post.User.Id,
-            //    AuthorRating = post.User.Rating,
-            //    Title = post.Title,
-            //    DatePosted = post.Created.ToString(),
-            //    RepliesCount = post.Replies.Count(),
-            //    Forum = BuildForumListing(post)
+            posts = _postService.GetFilteredPosts(forum, searchQuery).ToList();
 
-            //});
-            var postListing = new List<PostListingModel>();
-            foreach (var post in allPost)
+            var postListings = posts.Select(post => new PostListingModel
             {
-                var postListModel = new PostListingModel
-                {
-                    Id = post.PostId,
-                    AuthorId = post.Id,
-                    AuthorName = post.ApplicationUsers.UserName,
-                    AuthorRating = post.ApplicationUsers.Rating,
-                    Title = post.Title,
-                    DatePosted = post.Created.ToString(),
-                    RepliesCount = post.Replies.Count(),
-                    Forum = BuildForumListing(post)
-                };
-                postListing.Add(postListModel);
-            }
+                Id = post.PostId,
+                AuthorId = post.ApplicationUsers.Id,
+                AuthorRating = post.ApplicationUsers.Rating,
+                Title = post.Title,
+                DatePosted = post.Created.ToString(),
+                RepliesCount = post.Replies.Count(),
+                Forum = BuildForumListing(post)
+
+            });
+            
             var model = new ForumTopicModel
             {
-                Posts = postListing,
+                Posts = postListings,
                 Forum = BuildForumListing(forum)
             };
 
             return View(model);
 
+        }
+
+        [HttpPost]
+        public IActionResult Search(int id, string searchQuery)
+        {
+            return RedirectToAction("Topic", new { id, searchQuery });
         }
 
         private ForumListingModel BuildForumListing(Post post)
