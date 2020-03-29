@@ -61,7 +61,7 @@
                                 <form method="post" asp-action="Logout" asp-controller="account">
                                     Hello  @User.Identity.Name
                                     <button type="submit" class="nav-link">
-                                        Sign Out
+                                        Logout
                                     </button>
                                 </form>                               
                             </li>
@@ -69,10 +69,10 @@
                         else
                         {
                             <li class="nav-item ml-auto">
-                                <a class="nav-link text-dark active" asp-area="" asp-controller="Account" asp-action="Register">Sign Up</a>
+                                <a class="nav-link text-dark active" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Sign In</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
                             </li>
                         }
                     </ul>

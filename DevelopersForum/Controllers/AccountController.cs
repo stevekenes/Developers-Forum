@@ -35,8 +35,9 @@ namespace DevelopersForum.Controllers
             {
                 var user = new ApplicationUsers
                 {
-                    UserName = model.Email,
-                    Email = model.Email
+                    UserName = model.UserName,
+                    Email = model.Email,
+                    MemberSince = DateTime.Now
                 };
                 var result = await _userManager.CreateAsync(user, model.Password);
 
@@ -74,7 +75,11 @@ namespace DevelopersForum.Controllers
             if (ModelState.IsValid)
             {             
                 var result = await _signInManager.PasswordSignInAsync
-                    (model.Email, model.Password, model.RememberMe, false);
+                    (
+                        model.UserName, 
+                        model.Password, 
+                        model.RememberMe, false
+                    );
 
                 if (result.Succeeded)
                 {
