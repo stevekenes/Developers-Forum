@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DevelopersForum.Interfaces;
 using DevelopersForum.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace DevelopersForum.Services
 {

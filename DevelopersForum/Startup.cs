@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DevelopersForum.Interfaces;
 using DevelopersForum.Models;
 using DevelopersForum.Models.Interfaces;
 using DevelopersForum.Services;
@@ -59,11 +60,13 @@ namespace DevelopersForum
             //services.AddTransient<IEmailSender, EmailSender>();
             services.AddScoped<IForumService, ForumService>();
             services.AddScoped<IPostService, PostService>();
+            services.AddScoped<IUpload, UploadService>();
+            services.AddScoped<IApplicationUser, ApplicationUserService>();
 
-            services.AddTransient<DataSeeder>();
+
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
+             
             services.AddSession(options => {
                 options.IdleTimeout = TimeSpan.FromMinutes(3);
                 options.Cookie.IsEssential = true;

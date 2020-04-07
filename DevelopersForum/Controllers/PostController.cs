@@ -2,6 +2,7 @@
 using DevelopersForum.Models.Interfaces;
 using DevelopersForum.ViewModels;
 using DevelopersForum.ViewModels.Post;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace DevelopersForum.Controllers
 {
+    [Authorize]
     public class PostController : Controller
     {
         private readonly IPostService _postService;
@@ -26,6 +28,8 @@ namespace DevelopersForum.Controllers
             _userManager = userManager;
         }
 
+        [HttpGet]
+        [AllowAnonymous]
         public IActionResult Index(int id)
         {
             var post = _postService.GetById(id);
@@ -54,6 +58,7 @@ namespace DevelopersForum.Controllers
         {
             return _userManager.GetRolesAsync(applicationUsers).Result.Contains("Admin");
         }
+
 
         public IActionResult Create(int id)
         {

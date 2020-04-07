@@ -2,11 +2,11 @@
 
 <div class="container body-content">
     <div class="row sectionHeader">
-        <div class="sectionHeading">
+        <div class="sectionHeading col-md-10">
             <span>@Model.Forum.Name Forum</span>
             @if (Context.User.Identity.IsAuthenticated)
             {
-                <span id="headingBtn">
+                <span id="headingBtn" class="col-md-2 ml-auto" style="float: right">
                     <a asp-controller="Post"
                        asp-action="Create"
                        asp-route-id="@Model.Forum.Id" class="btn btn-newPost">
@@ -17,7 +17,7 @@
             <form asp-controller="Forum" asp-action="Search" method="post">
                 <div class="searchForm">
                     <input asp-for="SearchQuery" type="text" placeholder="Search..." class="searchBar" onfocus="clearThis(this)" />
-                    <button type="submit" class="btn btn-forumSearch">
+                    <button type="submit" class="btn btn-forumSearch btn-secondary">
                         <i class="material-icons">search</i>
                     </button>
                 </div>
@@ -44,7 +44,7 @@
     <div class="row forumIndexContent">
         @if (Model.Posts.Any())
         {
-            <table class="tablee table-hover table-bordered" id="forumIndexTable">
+            <table class="tablee table-hover table-bordered col-md-12" id="forumIndexTable">
                 <tbody>
                     @foreach (var post in Model.Posts)
                     {
@@ -82,7 +82,7 @@
         else
         {
             <div class="noPosts">
-                <i class="material-icons md-72">question_answer</i>
+                <i class="material-icons md-72"question_answer></i>
                 <h3>
                     It looks like there are no posts to be found.
                     Why not

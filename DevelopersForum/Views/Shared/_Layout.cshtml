@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - DevelopersForum</title>
+    <title>@ViewData["Title"] - Developers Forum</title>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -17,11 +17,11 @@
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"
               crossorigin="anonymous"
-              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"/>
+              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" />
     </environment>
     <link rel="stylesheet" href="~/css/site.css" />
-    <link href="https://fonts.googleapis.com/css?family=Roboto|Roboto-Mono" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+icon" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Mono" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
     <header>
@@ -36,35 +36,39 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Forum" asp-action="Index">Forums</a>
                         </li>
 
+                        @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Profile" asp-action="Index">View Users</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Administration" asp-action="ListRoles">
+                                    Manage Roles
+                                </a>
+                            </li>
+                        }
+
                         @if (signInManager.IsSignedIn(User))
                         {
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Settings<span class="caret"></span></a> 
-                                <ul class="nav-item dropdown-menu">
-                                    <li role="separator" class="divider"></li>
-                                    <li class="dropdown-header">Profile</li>
-                                    <li><a asp-controller="Profile" asp-action="Detail">My Profile</a></li>
-                                    @if (User.IsInRole("Admin"))
-                                    {
-                                        <li role="separator" class="divider"></li>
-                                        <li class="dropdown-header">Admin</li>
-                                        <li><a asp-controller="Forum" asp-action="Create">Create Forum</a></li>
-                                        <li><a asp-controller="Profile" asp-action="Index">View Users</a></li>
-                                    }
-                                </ul>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Profile" 
+                                   asp-action="Detail" asp-route-id="@userManager.GetUserId(User)">My Profile</a>
                             </li>
                         }
 
                         @if (signInManager.IsSignedIn(User))
                         {
                             <li class="nav-item ml-auto">
-                                <form method="post" asp-action="Logout" asp-controller="account">
-                                    Hello  @User.Identity.Name
-                                    <button type="submit" class="nav-link">
-                                        Logout
-                                    </button>
-                                </form>                               
+                                Hello  @User.Identity.Name   |
                             </li>
+                            <li>
+                                 <form method="post" asp-action="Logout" asp-controller="account">
+                                    <button type="submit" style="margin:auto">
+                                        Log out
+                                    </button>
+                                 </form>
+                            </li>
+
                         }
                         else
                         {
@@ -90,7 +94,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2020 - DevelopersForum - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2020 - Developed by Steve Ekene stevekenes1607@gmail.com
         </div>
     </footer>
 

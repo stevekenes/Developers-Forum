@@ -1,6 +1,7 @@
 ﻿using DevelopersForum.Models;
 using DevelopersForum.Models.Interfaces;
 using DevelopersForum.ViewModels;
+using DevelopersForum.ViewModels.Forum;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -65,6 +66,25 @@ namespace DevelopersForum.Controllers
 
             return View(model);
 
+        }
+
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(Forum forum)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(forum);
+            }
+
+            await _forumService.Create(forum);
+
+            return RedirectToAction("Index");
         }
 
         [HttpPost]

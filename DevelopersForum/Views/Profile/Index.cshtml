@@ -1,5 +1,35 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@using Microsoft.AspNetCore.Identity;
+@model DevelopersForum.ViewModels.Profile.ProfileListModel
+@inject SignInManager<ApplicationUsers> signInManager
+
+<h1>Users</h1>
+
+@if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+{
+    <table class="table table-hover" id="forumIndexTable">
+
+        <tbody>
+            @foreach (var user in Model.Profiles)
+            {
+                <tr>
+                    <td>
+                        <div class="forumLogo" style="background-image: url(@user.ProfileImageUrl); background-size: 100%; background-repeat: no-repeat;"></div>
+                        <a asp-controller="Profile" asp-action="Detail" asp-route-id="@user.UserId">
+                            @user.UserName
+                        </a>
+                    </td>
+                    <td>
+                        @user.Email
+                    </td>
+                    <td>
+                        @user.UserRating
+                    </td>
+                    <td>
+                        @user.MemberSince
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
+

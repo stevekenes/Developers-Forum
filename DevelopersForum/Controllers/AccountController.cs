@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DevelopersForum.Models;
 using DevelopersForum.ViewModels.Account;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -70,7 +71,7 @@ namespace DevelopersForum.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
         {
             if (ModelState.IsValid)
             {             
@@ -83,12 +84,23 @@ namespace DevelopersForum.Controllers
 
                 if (result.Succeeded)
                 {
+                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
                     return RedirectToAction("Index", "home");
                 }
 
                 ModelState.AddModelError("", "Invalid Login Attempt");
             }
 
+            return View();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult AccessDenied()
+        {
             return View();
         }
     }

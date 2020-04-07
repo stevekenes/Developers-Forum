@@ -1,22 +1,66 @@
-﻿@model DevelopersForum.ViewModels.ForumIndexModel 
-
+﻿@using Microsoft.AspNetCore.Identity;
+@model DevelopersForum.ViewModels.ForumIndexModel
+@inject SignInManager<ApplicationUsers> signInManager
 <h1>Forums</h1>
 
-<table class="table table-hover" id="forumIndexTable">
-    
-    <tbody>
-        @foreach (var forum in Model.ForumList)
-        {
-            <tr>
-                <td>
-                    <a asp-controller="Forum" asp-action="Topic" asp-route-id="@forum.Id">
-                        @forum.Name
-                    </a>
-                </td>
-                <td>
-                    @forum.Descritpion
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+@if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+{
+    <a class="btn btn-primary" asp-action="Create"
+       asp-controller="Forum">
+        Create Forum
+    </a>
+
+    <table class="table table-hover" id="forumIndexTable">
+
+        <tbody>
+            @foreach (var forum in Model.ForumList)
+            {
+                <tr>
+                    <td>
+                        <div class="forumLogo" style="background-image: url(@forum.ImageUrl); background-size: 100%; background-repeat: no-repeat;"></div>
+                        <a asp-controller="Forum" asp-action="Topic" asp-route-id="@forum.Id">
+                            @forum.Name
+                        </a>
+                    </td>
+                    <td>
+                        @forum.Descritpion
+                    </td>
+                    <td>
+                        <a class="btn btn-primary" asp-action="Edit"
+                           asp-controller="Forum" asp-route-id="@forum.Id">
+                            Edit
+                        </a>
+                    </td>
+                    <td>
+                        <a class="btn btn-danger" asp-action="Delete"
+                           asp-controller="Forum" asp-route-id="@forum.Id">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <table class="table table-hover" id="forumIndexTable">
+
+        <tbody>
+            @foreach (var forum in Model.ForumList)
+            {
+                <tr>
+                    <td>
+                        <div class="forumLogo" style="background-image: url(@forum.ImageUrl); background-size: 100%; background-repeat: no-repeat;"></div>
+                        <a asp-controller="Forum" asp-action="Topic" asp-route-id="@forum.Id">
+                            @forum.Name
+                        </a>
+                    </td>
+                    <td>
+                        @forum.Descritpion
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
