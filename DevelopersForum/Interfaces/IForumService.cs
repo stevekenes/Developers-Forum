@@ -10,11 +10,13 @@ namespace DevelopersForum.Models.Interfaces
     {
         Forum GetById(int id);
         IEnumerable<Forum> GetAll();
-        IEnumerable<ApplicationUsers> GetAllActiveUsers();
+
         Task<ICollection<Post>> GetAllPostByForumId(int id);
         Task Create(Forum forum);
         Task Delete(int forumId);
         Task UpdateForumTitle(int forumId, string newTitle);
         Task UpdateForumDescription(int forumId, string newDescription);
+        bool HasRecentPost(int forumId);
+        IEnumerable<ApplicationUsers> GetActiveUsers(int forumId);
     }
 }

@@ -6,13 +6,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace DevelopersForum.Controllers
 {
+    [Authorize]
     public class ProfileController : Controller
     {
-        private const string V = "Admin";
         private readonly UserManager<ApplicationUsers> _userManager;
         private readonly IApplicationUser _userService;
         private readonly IUpload _uploadService;
@@ -26,7 +27,6 @@ namespace DevelopersForum.Controllers
             _uploadService = uploadService;
         }
 
-        [Authorize]
         public IActionResult Detail(string id)
         {
             var user = _userService.GetById(id);
@@ -45,36 +45,41 @@ namespace DevelopersForum.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> UploadProfileImage(IFormFile file)
-        {
-            var userId =  _userManager.GetUserId(User);
+        //[HttpPost]
+        //public async Task<IActionResult> UploadProfileImage(IFormFile file)
+        //{
+        //    var userId =  _userManager.GetUserId(User);
 
-            // Connect to an Azure Storage Account Container
-            // Get Blob Container
+        //    // Connect to an Azure Storage Account Container
+        //    var connectionString = _configuration.GetConnectionString("AzureStorageAccount");
+        //    // Get Blob Container
+        //    var container = _uploadService.GetBlobContainer(connectionString, "profile-images");
+        //    // Parse the content disposition response header
+        //    var contentDisposition = ContentDispositionHeaderValue.Parse(file.ContentDisposition);
+        //    // Grab the filename
+        //    var filename = contentDisposition.FileName.Trim("""");
+        //    // Get a reference to a block blob
+        //    var blockBlob = container.GetBlobReference(fileName);
+        //    // On that block blob, upload our file <...file uploaded to the cloud
+        //    await blockBlob.UploadFormStreamAsync(file.OpenReadStream());
+        //    // Set the user's profile image to the URI
+        //    await _userService.SetProfileImage(userId, blockBlob.Uri);
+        //    // Redirect to the user's profile page
+        //    return RedirectToAction("Detail", "Profile", new { id = userId });
+        //}
 
-            // Parse the content disposition response header
-            // Grab the filename
-
-            // Get a reference to a block blob
-            // On that block blob, upload our file <...file uploaded to the cloud
-
-            // Set the user's profile image to the URI
-            // Redirect to the user's profile page
-
-            return View();
-        }
-
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             var users = _userService.GetAll()
+                .OrderByDescending(user => user.Rating)
                  .Select(user => new ProfileModel
                  {
-                     UserId = user.Id,
                      UserName = user.UserName,
                      Email = user.Email,
                      ProfileImageUrl = user.ProfileImageUrl,
-                     MemberSince = user.MemberSince
+                     MemberSince = user.MemberSince,
+                     UserRating = user.Rating.ToString()
                  });
 
             var model = new ProfileListModel

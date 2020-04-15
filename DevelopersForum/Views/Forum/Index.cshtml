@@ -1,66 +1,68 @@
 ﻿@using Microsoft.AspNetCore.Identity;
 @model DevelopersForum.ViewModels.ForumIndexModel
 @inject SignInManager<ApplicationUsers> signInManager
-<h1>Forums</h1>
 
-@if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
-{
-    <a class="btn btn-primary" asp-action="Create"
-       asp-controller="Forum">
-        Create Forum
-    </a>
+<div class="container body-content">
+    <div class="row sectionHeader">
+        <div class="sectionHeading col-md-10"> Browse Forum</div>
+        @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+        {
+            <span id="headingBtn" class="col-md-2 ml-auto" style="float: right">
+                <a asp-controller="Forum"
+                   asp-action="Create"
+                   class="btn btn-newPost">
+                    Create Forum
+                </a>
+            </span>
+        }
+        <div class="sectionDescription">
+            <p>Welcome to <strong>Developers Forum community</strong>, Posts are broadly categorized into separate forums by programming language or area of interest.</p>
+            <p>
+                Please read the Forum Guidelines before creating a new post.
+                @if (!User.Identity.IsAuthenticated)
+                {
+                    <span>You must be a <a asp-controller="Account" asp-action="Register">Registered member</a> to create a new post.</span>
+                }
+            </p>
+        </div>
+    </div>
 
-    <table class="table table-hover" id="forumIndexTable">
-
-        <tbody>
-            @foreach (var forum in Model.ForumList)
-            {
-                <tr>
-                    <td>
-                        <div class="forumLogo" style="background-image: url(@forum.ImageUrl); background-size: 100%; background-repeat: no-repeat;"></div>
-                        <a asp-controller="Forum" asp-action="Topic" asp-route-id="@forum.Id">
-                            @forum.Name
-                        </a>
-                    </td>
-                    <td>
-                        @forum.Descritpion
-                    </td>
-                    <td>
-                        <a class="btn btn-primary" asp-action="Edit"
-                           asp-controller="Forum" asp-route-id="@forum.Id">
-                            Edit
-                        </a>
-                    </td>
-                    <td>
-                        <a class="btn btn-danger" asp-action="Delete"
-                           asp-controller="Forum" asp-route-id="@forum.Id">
-                            Delete
-                        </a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <table class="table table-hover" id="forumIndexTable">
-
-        <tbody>
-            @foreach (var forum in Model.ForumList)
-            {
-                <tr>
-                    <td>
-                        <div class="forumLogo" style="background-image: url(@forum.ImageUrl); background-size: 100%; background-repeat: no-repeat;"></div>
-                        <a asp-controller="Forum" asp-action="Topic" asp-route-id="@forum.Id">
-                            @forum.Name
-                        </a>
-                    </td>
-                    <td>
-                        @forum.Descritpion
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+    <div class="row" id="forumIndexContent">
+        <table class="table table-hover" id="forumIndexTable">
+            <tbody>
+                @foreach (var forum in Model.ForumList)
+                {
+                    <tr>
+                        <td>
+                            <div class="forumLogo" style="background-image: url(@forum.ImageUrl);"></div>
+                            <div class="forumData">
+                                <div class="forumTitle">
+                                    <a asp-controller="Forum" asp-action="Topic" asp-route-id="@forum.Id">@forum.Name</a>
+                                </div>
+                                <div class="forumSubTitle">
+                                    @if (forum.HasRecentPost)
+                                    {
+                                        <div class="hasRecentPost" style="padding: 2px; background-color: #fe552f; color: #fff; text-align: center; border-radius: 5px; width: 30px;">Hot</div>
+                                    }
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="forumPostCount">
+                                @forum.NumberOfPosts Posts
+                            </div>
+                            <div class="forumMemberCount">
+                                @forum.NumberOfUsers Users
+                            </div>
+                        </td>
+                        <td>
+                            <div class="forumDescription">
+                                @forum.Descritpion
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

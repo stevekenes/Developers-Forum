@@ -12,6 +12,6 @@ namespace DevelopersForum.Interfaces
         IEnumerable<ApplicationUsers> GetAll();
 
         Task SetProfileImage(string id, Uri uri);
-        Task IncrementRating(string id, Type type);
+        Task UpdateUserRating(string id, Type type);
     }
 }

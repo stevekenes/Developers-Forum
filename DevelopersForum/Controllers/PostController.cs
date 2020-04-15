@@ -1,4 +1,5 @@
-﻿using DevelopersForum.Models;
+﻿using DevelopersForum.Interfaces;
+using DevelopersForum.Models;
 using DevelopersForum.Models.Interfaces;
 using DevelopersForum.ViewModels;
 using DevelopersForum.ViewModels.Post;
@@ -12,24 +13,25 @@ using System.Threading.Tasks;
 
 namespace DevelopersForum.Controllers
 {
-    [Authorize]
     public class PostController : Controller
     {
         private readonly IPostService _postService;
         private readonly IForumService _forumService;
         private readonly UserManager<ApplicationUsers> _userManager;
+        private readonly IApplicationUser _userService;
 
         public PostController(IPostService postService,
             IForumService forumService,
-            UserManager<ApplicationUsers> userManager)
+            UserManager<ApplicationUsers> userManager,
+            IApplicationUser userService)
         {
             _postService = postService;
             _forumService = forumService;
             _userManager = userManager;
+            _userService = userService;
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult Index(int id)
         {
             var post = _postService.GetById(id);
@@ -54,12 +56,7 @@ namespace DevelopersForum.Controllers
             return View(model);
         }
 
-        private bool IsAuthorAdmin(ApplicationUsers applicationUsers)
-        {
-            return _userManager.GetRolesAsync(applicationUsers).Result.Contains("Admin");
-        }
-
-
+        [Authorize]
         public IActionResult Create(int id)
         {
             var forum = _forumService.GetById(id);
@@ -82,11 +79,16 @@ namespace DevelopersForum.Controllers
             var user = _userManager.FindByIdAsync(userId).Result;
             var post = BuildPost(model, user);
 
-            _postService.Add(post).Wait(); //block the currnt thread until the task is complete
+            await _postService.Add(post);
 
-            //TO DO Implement User Rating management here 
+            await _userService.UpdateUserRating(userId, typeof(Post));
 
             return RedirectToAction("Index", "Post", new { id = post.PostId });
+        }
+
+        private bool IsAuthorAdmin(ApplicationUsers applicationUsers)
+        {
+            return _userManager.GetRolesAsync(applicationUsers).Result.Contains("Admin");
         }
 
         private Post BuildPost(NewPostModel model, ApplicationUsers user)

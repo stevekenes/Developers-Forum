@@ -59,7 +59,11 @@
                         @if (signInManager.IsSignedIn(User))
                         {
                             <li class="nav-item ml-auto">
-                                Hello  @User.Identity.Name   |
+                                <a asp-controller="Profile"
+                                   asp-action="Detail"
+                                   asp-route-id="@userManager.GetUserId(User)">
+                                    Hello, @User.Identity.Name   |
+                                </a> 
                             </li>
                             <li>
                                  <form method="post" asp-action="Logout" asp-controller="account">

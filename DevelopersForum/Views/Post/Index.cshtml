@@ -7,7 +7,7 @@
                 <span class="postIndexTitle">
                     @Model.Title
                 </span>
-                <span id="headingBtn" style="float:right">
+                <span id="headingBtn">
                     <a asp-controller="Forum" asp-action="Topic" asp-route-id="@Model.ForumId" class="btn btn-secondary">
                     Back to @Model.ForumName
                      </a>
@@ -24,7 +24,7 @@
                 <span class="postData">@Model.Created</span>
                 @if (Model.IsAuthorAdmin)
                 {
-                    <span class="isAdmin smaller">Admin</span>
+                    <span class="isAdmin smaller" style="display: inline-block; padding: 3px;background-color: #FFEB38; color:#000;font-family:'Roboto Mono';">Admin</span>
                 }
             </div>
             <div class="col-md-9 postContentContainer">
@@ -37,7 +37,7 @@
 
         @if (User.Identity.IsAuthenticated)
         {
-            <div class="row">
+            <div class="row" style="background-color: #3F51B5; padding: 8px;">
                 <span>
                     <a asp-controller="Reply" asp-action="Create" asp-route-id="@Model.Id" class="btn btn-newReply">
                         Post Reply
@@ -50,7 +50,7 @@
         {
             foreach (var reply in Model.Replies)
             {
-                <div class="row replyContent">
+                <div class="row replyContent" style="display: table;background-color: #fff;border-bottom: 1px solid #aaa; width:1110px;">
                     <div class="col-md-3 replyAuthorContainer">
                         <div class="postAuthorImage" style="background-image: url(@reply.AuthorImageUrl)"></div>
                         <a asp-controller="Profile" asp-action="Detail" asp-route-id="@reply.AuthorId">
@@ -58,14 +58,14 @@
                         </a>
                         @if (reply.IsAuthorAdmin)
                         {
-                            <div class="isAdmin smaller">Admin</div>
                             <br />
+                            <div class="isAdmin smaller" style="display: inline-block; padding: 3px;background-color: #FFEB38; color:#000;font-family:'Roboto Mono';">Admin</div>
                         }
-
-                        <span>@reply.Created</span>
+                        <br />
+                        <span class="postData">@reply.Created</span>
                     </div>
-                    <div class="col-md-9 replyAuthorContainer">
-                        <div class="postContent">
+                    <div class="col-md-9 replyContentContainer">
+                        <div class="replyContent">
                             @Html.Raw(reply.ReplyContent)
                         </div>
                     </div>

@@ -7,5 +7,6 @@ namespace DevelopersForum.Interfaces
 {
     public interface IUpload
     {
+        //CloudBlobContainer GetBlobContainer(string connectionString, string containerName);
     }
 }

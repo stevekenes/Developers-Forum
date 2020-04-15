@@ -20,7 +20,7 @@
                             Browse <input type="file" name="file" style="display: none" />
                         </label>
                     </div>
-                    <button type="submit" id="btn-profile" class="btn btn-default">Submit</button>
+                    <button type="submit" id="btn-profile" class="btn btn-primary">Submit</button>
                 </form>
             }
         </div>
@@ -28,7 +28,7 @@
             <span id="userName">@Model.UserName</span>
             @if (@Model.IsAdmin)
             {
-                <span class="isAdmin">Admin</span>
+                <span class="isAdmin" style="display: inline-block; padding: 3px;background-color: #FFEB38; color:#000;font-family:'Roboto Mono';">Admin</span>
             }
             <span id="userRating">Current Rating: @Model.UserRating</span>
             <span id="userEmailLabel">Email: @Model.Email</span>

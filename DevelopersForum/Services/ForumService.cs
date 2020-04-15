@@ -40,11 +40,6 @@ namespace DevelopersForum.Services
                 .Include(f => f.Posts);
         }
 
-        public IEnumerable<ApplicationUsers> GetAllActiveUsers()
-        {
-            throw new NotImplementedException();
-        }
-
         public Forum GetById(int id)
         {
             var forum = _context.Forums.Where(f => f.ForumId == id)
@@ -76,6 +71,26 @@ namespace DevelopersForum.Services
         public Task UpdateForumTitle(int forumId, string newTitle)
         {
             throw new NotImplementedException();
+        }
+
+        public bool HasRecentPost(int forumId)
+        {
+            const int hoursAgo = 12;
+            var window = DateTime.Now.AddHours(-hoursAgo);
+            return GetById(forumId).Posts.Any(post => post.Created > window);
+        }
+
+        public IEnumerable<ApplicationUsers> GetActiveUsers(int forumId)
+        {
+            var post = GetById(forumId).Posts;
+
+            if (post != null || !post.Any())
+            {
+                var postUsers = post.Select(p => p.ApplicationUsers);
+                var replyUsers = post.SelectMany(p => p.Replies).Select(r => r.ApplicationUsers);
+                return postUsers.Union(replyUsers).Distinct();
+            }
+            return new List<ApplicationUsers>();
         }
     }
 }

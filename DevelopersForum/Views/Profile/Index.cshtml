@@ -2,34 +2,44 @@
 @model DevelopersForum.ViewModels.Profile.ProfileListModel
 @inject SignInManager<ApplicationUsers> signInManager
 
-<h1>Users</h1>
-
-@if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
-{
-    <table class="table table-hover" id="forumIndexTable">
-
-        <tbody>
-            @foreach (var user in Model.Profiles)
-            {
+<div class="container body-content">
+    <div class="row sectionHeader">
+        <div class="sectionHeading">Browse Users</div>
+    </div>
+    <div class="row" id="forumIndexContent">
+        <table class="table table-hover" id="userIndexTable">
+            <thead>
                 <tr>
-                    <td>
-                        <div class="forumLogo" style="background-image: url(@user.ProfileImageUrl); background-size: 100%; background-repeat: no-repeat;"></div>
-                        <a asp-controller="Profile" asp-action="Detail" asp-route-id="@user.UserId">
-                            @user.UserName
-                        </a>
-                    </td>
-                    <td>
-                        @user.Email
-                    </td>
-                    <td>
-                        @user.UserRating
-                    </td>
-                    <td>
-                        @user.MemberSince
-                    </td>
+                    <th>Image</th>
+                    <th>UserName</th>
+                    <th>Email</th>
+                    <th>Member Since</th>
+                    <th>Rating</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}
+            </thead>
+            <tbody>
+                @foreach (var user in Model.Profiles)
+                {
+                    <tr class="userRow">
+                        <td>
+                            <div class="userProfile" style="background-image: url(@user.ProfileImageUrl)"></div>
+                        </td>
+                        <td>
+                            @user.UserName
+                        </td>
+                        <td>
+                            @user.Email
+                        </td>
+                        <td>
+                            @user.MemberSince
+                        </td>
+                        <td>
+                            @user.UserRating
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
 
